@@ -1,7 +1,5 @@
-import atexit
-
-from service import Service
-from watcher import Watcher
+from client.service import Service
+from client.watcher import Watcher
 from utils import zip_paths
 
 
@@ -32,13 +30,3 @@ class Client(object):
         """
         stream = zip_paths(self.directory)
         self.s.send(stream)
-
-
-if __name__ == "__main__":
-    c = Client("less", ".")
-    c.start_watching()
-
-@atexit.register
-def on_exit():
-    if c:
-        c.stop_watching()
