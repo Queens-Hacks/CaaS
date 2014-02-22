@@ -8,6 +8,6 @@
     :copyright: 2014 Carey Metcalfe, Graham McGregor, Phil Schleihauf
 """
 
-from flask import Flask
+from werkzeug.exceptions import NotFound
 
-app = Flask(__name__)
+
