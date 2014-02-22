@@ -2,7 +2,7 @@ CaaS
 ====
 
 Compilation as a Service. Instead of having to install node.js to compile LESS
-files, or Ruby to compile SaaS files, now you can just send those files to the
+files, or Ruby to compile SASS files, now you can just send those files to the
 cloud and have it compile them for you!
 
 Using the service
