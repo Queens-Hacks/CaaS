@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import tempfile
 import os
-import shutil
 import glob
 import subprocess
-from utils import tar_paths, untar_to_path
+from utils import tar_paths, untar_to_path, rmrf
 from werkzeug.exceptions import NotFound
 from flask import Flask, url_for, redirect, render_template, request, Response
 
@@ -40,14 +39,6 @@ from . import account
 def home():
     return render_template("home.html")
 
-
-def rmrf(path):
-    """Just delete it, dude"""
-
-    if os.path.isdir(path):
-        shutil.rmtree(path)
-    elif os.path.exists(path):
-        os.remove(path)
 
 def output_logs(out_dir, code, output):
     log_dir = os.path.join(out_dir, "__precomp__")

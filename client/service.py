@@ -2,7 +2,7 @@ import queue
 import threading
 import requests
 import os
-from utils import untar_stream_to_path
+from utils import untar_stream_to_path, rmrf
 
 class Service(object):
 
@@ -55,6 +55,9 @@ class Service(object):
                 os.mkdir(out_dir)
             except EnvironmentError as e:
                 print ("Cannot create output folder '{0}': {1}".format(out_dir, str(e)))
+        else:
+            # Delete existing __precomp__ folder
+            rmrf(os.path.join(out_dir, "__precomp__"))
 
         untar_stream_to_path(content, out_dir)
 

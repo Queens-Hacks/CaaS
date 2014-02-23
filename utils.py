@@ -2,6 +2,7 @@ import os
 import io
 import tarfile
 import logging
+import shutil
 
 
 def tar_paths(paths):
@@ -67,3 +68,12 @@ def untar_to_path(zfile, target):
 def untar_stream_to_path(stream, target):
     zfile = io.BytesIO(stream)
     untar_to_path(zfile, target)
+
+
+def rmrf(path):
+    """Just delete it, dude"""
+
+    if os.path.isdir(path):
+        shutil.rmtree(path)
+    elif os.path.exists(path):
+        os.remove(path)
