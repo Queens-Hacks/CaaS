@@ -103,13 +103,13 @@ def get_service(processor):
     in_dir = tempfile.mkdtemp()
     out_dir = tempfile.mkdtemp()
 
-    status = False
+    comp_result = False
 
     try:
         untar_to_path(request.files['data'], in_dir)
 
         # Compile the code
-        status = (processors[processor])(in_dir, out_dir)
+        comp_result = (processors[processor])(in_dir, out_dir)
 
         stream = tar_paths(out_dir)
     finally:
@@ -117,7 +117,7 @@ def get_service(processor):
         rmrf(out_dir)
 
     r = Response(stream, mimetype="application/gzip")
-    if not status:
+    if not comp_result:
         r.headers.add('warning', "Compilation reported a failure")
 
     return r
