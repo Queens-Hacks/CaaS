@@ -62,17 +62,17 @@
 
     <div class="use selected curl">
       <pre>
-tar -cz folder | curl -sfF data=@- http://precomp.ca/<em class="processor">{{ processors[0] }}</em>/?key=<em class="key">{{ current_user.key }}</em>| tar zxf - -C output_folder/
+tar -cz in_dir | curl -sfF data=@- http://precomp.ca/<em class="compiler">{{ processors[0] }}</em>/?key=<em class="key">{{ current_user.key }}</em>| tar zxf - -C out_dir/
 </pre>
     </div>
 
     <div class="use autopilot">
       <pre>
 config:
-  processor: <em class="processor">{{ processors[0] }}</em>
   key: <em class="key">{{ current_user.key }}</em>
-  input: input_folder
-  output: output_folder
+  compiler: <em class="compiler">{{ processors[0] }}</em>
+  input: in_dir
+  output: out_dir
   extras:
     logging: on
 </pre>
