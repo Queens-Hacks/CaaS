@@ -3,7 +3,7 @@ from client.watcher import Watcher
 
 import yaml
 
-class Client(object):
+class Manager(object):
 
     def __init__(self, config):
 

@@ -1,13 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-    precomp
-    ~~~~~~~
-
-    la la la
-
-    :copyright: 2014 Carey Metcalfe, Graham McGregor, Phil Schleihauf
-"""
-
 import tempfile
 from os import environ
 from shutil import rmtree
@@ -25,10 +16,10 @@ class SubFlask(Flask):
 
 app = SubFlask(__name__)
 app.config.update(
-    DEBUG=environ.get('DEBUG') == 'True',
-    SECRET_KEY=environ['SECRET_KEY'],
-    GITHUB_CLIENT_ID=environ['GITHUB_CLIENT_ID'],
-    GITHUB_CLIENT_SECRET=environ['GITHUB_CLIENT_SECRET'],
+    DEBUG=environ.get('DEBUG', '') == 'True',
+    SECRET_KEY=environ.get('SECRET_KEY', ''),
+    GITHUB_CLIENT_ID=environ.get('GITHUB_CLIENT_ID', ''),
+    GITHUB_CLIENT_SECRET=environ.get('GITHUB_CLIENT_SECRET', ''),
 )
 
 

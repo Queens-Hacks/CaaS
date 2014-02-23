@@ -56,4 +56,3 @@ class Watcher(threading.Thread):
 
     def unlock(self):
         self.lock.release()
-
