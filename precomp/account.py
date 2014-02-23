@@ -8,7 +8,8 @@
     :copyright: 2014 Carey Metcalfe, Graham McGregor, Phil Schleihauf
 """
 
-from precomp import app
+from os import urandom
+from base64 import urlsafe_b64encode
 from urllib.parse import urlparse, urljoin, parse_qsl
 from bson.objectid import ObjectId
 from requests.sessions import Session
@@ -20,6 +21,7 @@ from flask.ext.login import (LoginManager, login_user, logout_user, UserMixin,
                              current_user, login_required)
 from flask.ext.pymongo import PyMongo
 from flask.ext.kale import Kale
+from precomp import app, processors
 
 
 GH_BASE_URL = 'https://api.github.com/'
@@ -98,9 +100,6 @@ def get_mongodb():
 
 
 class User(kale.Model, UserMixin):
-
-    _collection_name = 'users'
-
     """
     {
       username: github "login",
@@ -109,6 +108,8 @@ class User(kale.Model, UserMixin):
       access_token: github 40 char token,
     }
     """
+
+    _collection_name = 'users'
 
     @classmethod
     def gh_get_or_create(cls, session):
@@ -144,6 +145,11 @@ def load_user(user_id):
     return user
 
 
+@app.route("/")
+def home():
+    return render_template("home.html", page='home')
+
+
 @app.route('/login')
 def login():
     auth_uri = gh_oauth.get_authorize_url()
@@ -174,4 +180,16 @@ def logout():
 @app.route('/account')
 @login_required
 def account():
-    return render_template('account.html')
+    hide_message = True if 'dismissed_welcome' in current_user else False
+    current_user.key = 1234
+    return render_template('account.html', page='account',
+                           hide_message=hide_message, processors=tuple(processors))
+
+
+@app.route('/dismiss-welcome')
+@login_required
+def dismiss_welcome():
+    current_user.dismissed_welcome = True
+    current_user.save()
+    return redirect(url_for('account'))
+

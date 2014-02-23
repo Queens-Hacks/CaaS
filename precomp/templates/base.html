@@ -10,14 +10,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
   </head>
   <body>
-    <div class="container">
+    <div class="container {{ page }}">
       <header>
         <h1>
           <img src="{{ url_for('static', filename='img/cloud.svg') }}" alt="Precomp Logo"/>
           Precomp
-          <small>
-            simplify your stack
-          </small>
+          {% if page == 'home' %}
+            <small>
+              simplify your stack
+            </small>
+          {% endif %}
         </h1>
 
         <div class="account-buttons">

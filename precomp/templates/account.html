@@ -2,6 +2,47 @@
 
 {% block content %}
 
-  <h2>Hello, {{ current_user.name or current_user.username }}</h2>
+  {% if not hide_message %}
+    <div class="message welcome">
+      <a class="dismiss button" href="{{ url_for('dismiss_welcome') }}" title="dismiss">&times;</a>
+      <h2>Hello, {{ current_user.name or current_user.username }}</h2>
+      <p>Welcome to Precomp! It would be really awesome if this message said something useful, but for some reason I'm the one writing it right now. And it's 4am. So instead, you get this useless copy. Hope you're happy.</p>
+    </div>
+  {% endif %}
+
+  <form>
+    <h3><label>Power</label></h3>
+    on/off...
+  </form>
+
+  <h3>Key</h3>
+  <span class="key">{{ current_user.key }}</span>
+
+
+  <h2>Quickstart</h2>
+  <form>
+    <p>
+      I want to compile
+      <select>
+        {% for processor in processors %}
+          <option>{{ processor }}</option>
+        {% endfor %}
+      </select>
+    </p>
+  </form>
+
+  <h3>Compile with <code>curl</code></h3>
+  <pre>
+curl whateever tar | http://<em class="processor">{{ processors[0] }}</em>.precomp.ca/?key=<em class="key">{{ current_user.key }}</em> | tar zx whatever
+</pre>
+
+  <h3>Autopilot with our autoclient</h3>
+  <pre>
+config:
+  in: yaml
+  woo: awesome
+  processor: <em class="processor">{{ processors[0] }}</em>
+  key: <em class="key">{{ current_user.key }}</em>
+</pre>
 
 {% endblock %}

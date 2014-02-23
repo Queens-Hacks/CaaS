@@ -10,10 +10,10 @@ Using the service
 
 CLI One-liner
 -------------
-    tar -cz folder | curl -sfF data=@- http://sass.precomp.ca | tar zx
+    tar -cz folder | curl -sfF data=@- http://sass.precomp.ca | (mkdir -p output_folder & tar zxf - -C output_folder/)
 
 This will take the contents of `folder`, compress them, send them to the
-SASS CaaS, then output the resulting compiled code.
+LESS CaaS, then output the resulting compiled code to `output_folder`.
 
 The response will be the compiled css files alongside the SASS files.
 
