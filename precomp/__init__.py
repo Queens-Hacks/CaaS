@@ -1,13 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-    precomp
-    ~~~~~~~
-
-    la la la
-
-    :copyright: 2014 Carey Metcalfe, Graham McGregor, Phil Schleihauf
-"""
-
 import tempfile
 from os import environ
 from shutil import rmtree

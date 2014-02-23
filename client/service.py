@@ -1,3 +1,5 @@
+import queue
+import threading
 
 class Service(object):
 
@@ -9,13 +11,38 @@ class Service(object):
         "haml",
     )
 
-    def __init__(self, service):
-        """Do nothing for now, but in the future sign into the API"""
-        if not service in self.SERVICES:
-            raise Exception("'{0}' is not a valid service type".format(service))
-        self.service = service
+    def __init__(self):
+        """In the future sign into the API"""
 
-    def send(self, stream):
+        self.queue = queue.Queue()
+        self.worker = threading.Thread(target=self.serve_forever)
+        self.worker.start()
+
+    def process(self, conf, stream, callback):
+        """Adds an request to the queue"""
+        if not conf['type'] in self.SERVICES:
+            raise Exception("'{0}' is not a valid service type".format(conf['type']))
+
+        self.queue.put_nowait((conf, stream, callback))
+
+    def shutdown(self):
+        # Put a 'poison job' in the queue
+        self.queue.put_nowait(None)
+
+    def join(self):
+        self.worker.join()
+
+    def serve_forever(self):
         """Sends the data in the stream to the compilation service"""
-        print (stream)
+        while True:
+            temp = self.queue.get()
 
+            # Check if 'poisoned'
+            if temp is None:
+                return
+
+            conf, stream, callback = temp
+
+            print (conf['output'])
+            print (stream)
+            callback()
