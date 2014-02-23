@@ -1,5 +1,5 @@
 debug:
-  type: "less"
+  type: "sass"
   input: "client"
   output: "."
   interval: 1
