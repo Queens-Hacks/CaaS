@@ -240,8 +240,8 @@ def toggle_compiler_state():
 def create_compiler(name):
     params = {
         'name': name,
-        'client_id': 'Ej0wEYLV0DMcz6XQlcMpJ',
-        'api_key': '6d8536c838700bfb95c1320933a95fb9',
+        'client_id': app.config['DO_CLIENT_ID'],
+        'api_key': app.config['DO_API_KEY'],
         'size_id': DO_SIZE_ID,
         'image_id': DO_IMAGE_ID,
         'region_id': DO_REGION_ID,
@@ -256,8 +256,8 @@ def create_compiler(name):
 
 def start_compiler(droplet_id):
     params = {
-        'client_id': 'Ej0wEYLV0DMcz6XQlcMpJ',
-        'api_key': '6d8536c838700bfb95c1320933a95fb9',
+        'client_id': app.config['DO_CLIENT_ID'],
+        'api_key': app.config['DO_API_KEY'],
     }
     url = DO_BASE_URL + 'droplets/{}/power_on'.format(droplet_id)
     response = requests.get(url, params=params)
@@ -268,8 +268,8 @@ def start_compiler(droplet_id):
 
 def stop_compiler(droplet_id):
     params = {
-        'client_id': 'Ej0wEYLV0DMcz6XQlcMpJ',
-        'api_key': '6d8536c838700bfb95c1320933a95fb9',
+        'client_id': app.config['DO_CLIENT_ID'],
+        'api_key': app.config['DO_API_KEY'],
     }
     url = DO_BASE_URL + 'droplets/{}/power_off'.format(droplet_id)
     response = requests.get(url, params=params)
