@@ -23,5 +23,14 @@ def rewelcome(username):
     user.save()
 
 
+@manager.command
+def remove(username):
+    from precomp import account
+    user = account.User.collection.find_one({'username': username})
+    if user is None:
+        raise SystemExit('User {} not found.'.format(username))
+    user.remove()
+
+
 if __name__ == '__main__':
     manager.run()
