@@ -1,6 +1,7 @@
 import queue
 import threading
 import requests
+import os
 from utils import untar_stream_to_path
 
 class Service(object):
@@ -42,7 +43,19 @@ class Service(object):
             return None
         else:
             return r.content
+    
+    def extract_response(self, content, out_dir):
+        if content is None:
+            return
 
+        # Create output dir if needed
+        if not os.path.isdir(out_dir):
+            try:
+                os.mkdir(out_dir)
+            except EnvironmentError as e:
+                print ("Cannot create output folder '{0}': {1}".format(out_dir, str(e)))
+
+        untar_stream_to_path(content, out_dir)
 
     def serve_forever(self):
         """Sends the data in the stream to the compilation service"""
@@ -57,8 +70,7 @@ class Service(object):
 
             try:
                 content = self.send(conf['type'], stream)
-                if content is not None:
-                    untar_stream_to_path(content, conf['output'])
+                self.extract_response(content, conf['output'])
             finally:
                 # Make sure to always call the callback
                 callback()
