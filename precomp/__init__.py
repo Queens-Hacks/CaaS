@@ -8,8 +8,8 @@
     :copyright: 2014 Carey Metcalfe, Graham McGregor, Phil Schleihauf
 """
 
+from os import environ
 from werkzeug.exceptions import NotFound
-
 from flask import Flask, url_for, redirect, render_template
 
 class SubFlask(Flask):
@@ -21,9 +21,16 @@ class SubFlask(Flask):
         return super(SubFlask, self).route(rule, *args, **kwargs)
 
 app = SubFlask(__name__)
-app.config.update(dict(
-    DEBUG=True
-))
+app.config.update(
+    DEBUG=environ.get('DEBUG') == 'True',
+    SECRET_KEY=environ['SECRET_KEY'],
+    GITHUB_CLIENT_ID=environ['GITHUB_CLIENT_ID'],
+    GITHUB_CLIENT_SECRET=environ['GITHUB_CLIENT_SECRET'],
+)
+
+
+# we can import other stuff now that we have a reference to app.
+from . import account
 
 
 @app.route("/")

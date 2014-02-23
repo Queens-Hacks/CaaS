@@ -1,4 +1,8 @@
 Flask==0.10.1
 Flask-Login==0.2.9
 Flask-Script==0.6.7
+Flask-PyMongo==0.3.0
+Flask-kale==0.1
+requests==2.2.1
+rauth==0.6.2
 requests==2.2.1
