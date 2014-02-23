@@ -227,3 +227,11 @@ pre {
   right: 0;
 }
 
+
+select {
+  color: #09a;
+}
+
+.usecase em {
+  font-style: normal;
+}

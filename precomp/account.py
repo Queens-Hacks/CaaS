@@ -181,9 +181,9 @@ def logout():
 @login_required
 def account():
     hide_message = True if 'dismissed_welcome' in current_user else False
-    print(processors)
+    current_user.key = 1234
     return render_template('account.html', page='account',
-                           hide_message=hide_message, processors=processors)
+                           hide_message=hide_message, processors=tuple(processors))
 
 
 @app.route('/dismiss-welcome')

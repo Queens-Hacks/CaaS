@@ -10,18 +10,39 @@
     </div>
   {% endif %}
 
-  <h2>My Precomp</h2>
+  <form>
+    <h3><label>Power</label></h3>
+    on/off...
+  </form>
+
+  <h3>Key</h3>
+  <span class="key">{{ current_user.key }}</span>
+
 
   <h2>Quickstart</h2>
   <form>
     <p>
       I want to compile
-      <select style="color:black;">
+      <select>
         {% for processor in processors %}
           <option>{{ processor }}</option>
         {% endfor %}
       </select>
     </p>
   </form>
+
+  <h3>Compile with <code>curl</code></h3>
+  <pre>
+curl whateever tar | http://<em class="processor">{{ processors[0] }}</em>.precomp.ca/?key=<em class="key">{{ current_user.key }}</em> | tar zx whatever
+</pre>
+
+  <h3>Autopilot with our autoclient</h3>
+  <pre>
+config:
+  in: yaml
+  woo: awesome
+  processor: <em class="processor">{{ processors[0] }}</em>
+  key: <em class="key">{{ current_user.key }}</em>
+</pre>
 
 {% endblock %}
