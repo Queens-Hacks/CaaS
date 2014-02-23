@@ -79,6 +79,7 @@ def mirror_proc(in_dir, out_dir):
     files = glob.glob(os.path.join(in_dir, "*"))
     code, output = system_call(["cp", "-vr"] + files + [out_dir])
     output_logs(out_dir, code, output)
+    return code
 
 @processor('sass')
 def sass_proc(in_dir, out_dir):
@@ -89,6 +90,7 @@ def sass_proc(in_dir, out_dir):
     code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
 
     output_logs(out_dir, code, output)
+    return code
 
 @processor('scss')
 def scss_proc(in_dir, out_dir):
@@ -99,6 +101,7 @@ def scss_proc(in_dir, out_dir):
     code, output = system_call(("sass", os.path.join(in_dir, MAIN_SCSS), os.path.join(out_dir, OUTPUT_FILE)))
 
     output_logs(out_dir, code, output)
+    return code
 
 @processor('less')
 def less_proc(in_dir, out_dir):
@@ -109,6 +112,7 @@ def less_proc(in_dir, out_dir):
     code, output = system_call(("lessc", os.path.join(in_dir, MAIN_LESS), os.path.join(out_dir, OUTPUT_FILE)))
 
     output_logs(out_dir, code, output)
+    return code
 
 @processor('gccmake')
 def gccmake_proc(in_dir, out_dir):
@@ -133,7 +137,7 @@ def get_service(processor):
     """routes subdomains to the right service"""
 
     if processor not in processors:
-        return Response ("Invalid processor {0}".format(processor), status=400)
+        return Response ("Invalid processor '{0}'. Valid processors are: {1}".format(processor, ", ".join(processors)), status=400)
 
     elif request.files is None:
         return Response ("No files recieved, should be 1", status=400)
@@ -147,15 +151,21 @@ def get_service(processor):
     in_dir = tempfile.mkdtemp()
     out_dir = tempfile.mkdtemp()
 
+    code = 255
+
     try:
         untar_to_path(request.files['data'], in_dir)
 
         # Compile the code
-        (processors[processor])(in_dir, out_dir)
+        code = (processors[processor])(in_dir, out_dir)
 
         stream = tar_paths(out_dir)
     finally:
         rmrf(in_dir)
         rmrf(out_dir)
 
-    return Response(stream, mimetype="application/gzip")
+    r = Response(stream, mimetype="application/gzip")
+    if code != 0:
+        r.headers.add('warning', "Compilation returned non-zero exit code {0}".format(code))
+
+    return r
