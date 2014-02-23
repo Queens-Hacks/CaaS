@@ -58,3 +58,7 @@ def zip_paths(paths):
     zip_stream.seek(0)
 
     return zip_stream
+
+def unzip_to_path(zfile, target):
+    with zipfile.ZipFile(zfile, 'r') as zfile:
+        zfile.extractall(path=target)
