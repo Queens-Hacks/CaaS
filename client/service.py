@@ -14,6 +14,7 @@ class Service(object):
         "scss",
         "less",
         "haml",
+        "mirror",
     )
 
     def __init__(self):

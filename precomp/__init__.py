@@ -2,6 +2,7 @@
 import tempfile
 import os
 import shutil
+import glob
 import subprocess
 from utils import tar_paths, untar_to_path
 from werkzeug.exceptions import NotFound
@@ -76,6 +77,12 @@ def processor(lang):
         return func
     return decorate
 
+@processor('mirror')
+def mirror_proc(in_dir, out_dir):
+    """Just mirrors the input directory"""
+    files = glob.glob(os.path.join(in_dir, "*"))
+    code, output = system_call(["cp", "-vr"] + files + [out_dir])
+    output_logs(out_dir, code, output)
 
 @processor('sass')
 def sass_proc(in_dir, out_dir):
