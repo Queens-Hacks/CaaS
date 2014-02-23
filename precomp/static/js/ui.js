@@ -4,5 +4,5 @@ $('.tabs .button').on('click', function() {
 });
 
 $('.i-want-to select').on('change', function() {
-  $('.processor').text($('select option:selected').text());
+  $('.compiler').text($('select option:selected').text());
 });

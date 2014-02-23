@@ -1,8 +1,9 @@
-debug:
-  type: "less"
-  input: "client"
-  output: "sample_compiled_output_dir"
-  interval: 1
-  extras:
-    logging: on
-    targets: ["main.less", "style.less"]
+key: "s0mek3yh3r3"
+tasks:
+  debug:
+    compiler: "less"
+    input: "client"
+    output: "sample_compiled_output_dir"
+    extras:
+      logging: on
+      targets: ["main.less", "style.less"]

@@ -192,6 +192,11 @@ def unauthorized():
     return redirect(url_for('login'))
 
 
+@app.errorhandler(404)
+def page_not_found(err):
+    return render_template('error.html', error_header=err)
+
+
 @app.route('/logout')
 def logout():
     logout_user()

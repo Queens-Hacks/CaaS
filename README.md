@@ -10,7 +10,7 @@ Using the service
 
 CLI One-liner
 -------------
-    tar -cz folder | curl -sfF data=@- http://sass.precomp.ca | (mkdir -p output_folder & tar zxf - -C output_folder/)
+    tar -cz folder | curl -sfF data=@- http://precomp.ca/sass | tar zxf - -C output_folder/
 
 This will take the contents of `folder`, compress them, send them to the
 LESS CaaS, then output the resulting compiled code to `output_folder`.
@@ -29,38 +29,37 @@ The client is configured using YAML.
 Example config:
 
 ```yaml
-make_css:
-  type: "less"
-  input: "project/less"
-  output: "project/css"
-  interval: 1
-  extras:
-    targets: ["main.less", "styles.less"]
-    logging: off
+key: "s0mek3yh3re"
+tasks:
+  make_css:
+    compiler: "less"
+    input: "project/less"
+    output: "project/css"
+    extras:
+      targets: ["main.less", "styles.less"]
+      logging: off
 
-compile_haml:
-  type: "haml"
-  input: "project/haml"
-  output: "project/html"
-  interval: 1
+  compile_coffee:
+    compiler: "coffee"
+    input: "project/coffee"
+    output: "project/js"
 
-compile_c:
-  type: "gccmake"
-  input: "helloworld" # Has a makefile and a hello.c file
-  output: "helloworld/bin"
-  interval: 5
-  extras:
-    targets: ['hello.out']
+  compile_c:
+    compiler: "gccmake"
+    input: "helloworld" # Has a makefile and a hello.c file
+    output: "helloworld/bin"
+    extras:
+      targets: ['hello.out']
 ```
 
 Things to keep in mind:
 - Indentation is important. Use tabs or spaces to indent, but not both.
+- The `key` is your unique identification key that can be found on your account page.
 - `make_css`, `compile_haml`, and `compile_c` are the names of the watch jobs.
 - `type` is the type of compilation to perform.
 - The `input` parameter can be a file or a directory.
 - The `output` parameter is _always_ treated as a folder.
   If you only want to output a single file, use the parent directory instead of the filename.
-- `interval` is how long to wait (in seconds) between checking the filesystem for changes.
 - C programs must have a makefile in the project directory
 
 Key/value pairs under the `extras` parameter are all optional and differ based on the type of compilation being done.
