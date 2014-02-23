@@ -55,7 +55,7 @@ Setting up the server
  5. Configure the app. You can either create a `config.py` file, or export the variables to the environment. You must set these variables:
 
 Variable            | Description
----------------------------------
+--------------------|------------
 `SECRET_KEY`        | Must be something, but for local development it can be anything
 `DEBUG`             | You'll probably want this to be `True` for local development
 `GITHUB_CLIENT_ID`  | GitHub gives you this after registering your application on GitHub
