@@ -14,8 +14,16 @@ h3 {
 h1 {
   font-size: 2.8em;
 }
+.account h1 {
+  font-size: 2em;
+}
 h1 img {
   margin-right: -0.8em;
+}
+.account header h1 img {
+  width: 81px;
+  margin-right: 0;
+  vertical-align: middle;
 }
 
 h1 small {
@@ -28,7 +36,9 @@ h1 small {
   width: 720px;
   margin: 2em auto 1em;
 }
-
+.account.container {
+  margin-top: 1em;
+}
 
 header {
   position: relative;
@@ -39,9 +49,16 @@ header {
   top: 0;
   right: 0;
 }
+.account .account-buttons {
+  top: 0.7em;
+  /*margin-top: -1.25em;*/
+}
 
 main {
   margin-top: 6em;
+}
+.account main {
+  margin-top: 3em;
 }
 
 h2 {
@@ -194,3 +211,19 @@ pre {
 .clearfix {
   clear: both;
 }
+
+
+.message {
+  position: relative;
+  width: 66.667%;
+  margin: 0 auto;
+}
+.message .dismiss {
+  position: absolute;
+  padding: 0.5em;
+  line-height: 0.75em;
+  height: 0.75em;
+  top: -0.3em;
+  right: 0;
+}
+

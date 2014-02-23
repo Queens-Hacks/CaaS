@@ -37,10 +37,6 @@ except KeyError as e:
 # we can import other stuff now that we have a reference to app.
 from . import account
 
-@app.route("/")
-def home():
-    return render_template("home.html")
-
 
 def output_logs(out_dir, code, output):
     log_dir = os.path.join(out_dir, "__precomp__")

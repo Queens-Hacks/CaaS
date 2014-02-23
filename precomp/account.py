@@ -8,6 +8,8 @@
     :copyright: 2014 Carey Metcalfe, Graham McGregor, Phil Schleihauf
 """
 
+from os import urandom
+from base64 import urlsafe_b64encode
 from precomp import app
 from urllib.parse import urlparse, urljoin, parse_qsl
 from bson.objectid import ObjectId
@@ -144,6 +146,11 @@ def load_user(user_id):
     return user
 
 
+@app.route("/")
+def home():
+    return render_template("home.html", page='home')
+
+
 @app.route('/login')
 def login():
     auth_uri = gh_oauth.get_authorize_url()
@@ -174,4 +181,15 @@ def logout():
 @app.route('/account')
 @login_required
 def account():
-    return render_template('account.html')
+    hide_message = True if 'dismissed_welcome' in current_user else False
+    return render_template('account.html', page='account',
+                           hide_message=hide_message)
+
+
+@app.route('/dismiss-welcome')
+@login_required
+def dismiss_welcome():
+    current_user.dismissed_welcome = True
+    current_user.save()
+    return redirect(url_for('account'))
+
