@@ -79,13 +79,16 @@ def sass_proc(input_dir):
 def get_service(processor):
     """routes subdomains to the right service"""
     if processor not in processors:
-        return Response ("invalid processor", status=400)
+        return Response ("invalid processor {}".format(processor), status=400)
 
-    elif request.files is None or len(request.files) != 1:
-        return Response ("wrong number of files", status=400)
+    elif request.files is None:
+        return Response ("no files recieved, should be 1", status=400)
 
-    elif request.files['source'] is None:
-        return Response ("send file to source.... or else", status=400)
+    elif len(request.files) != 1:
+        return Response ("should one send 1 file, sent {}".format(len(request.files)), status=400)
+
+    elif request.files['data'] is None:
+        return Response ("form key should be 'data'", status=400)
 
     temp_dir = unpack_file(request.files['source'])
 
