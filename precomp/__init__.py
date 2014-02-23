@@ -27,6 +27,7 @@ app = SubFlask(__name__)
 app.config.update(
     DEBUG=environ.get('DEBUG') == 'True',
     SECRET_KEY=environ['SECRET_KEY'],
+    MONGO_URI=environ['MONGO_URI'],
     GITHUB_CLIENT_ID=environ['GITHUB_CLIENT_ID'],
     GITHUB_CLIENT_SECRET=environ['GITHUB_CLIENT_SECRET'],
 )
