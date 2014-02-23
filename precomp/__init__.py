@@ -116,7 +116,7 @@ def get_service(processor):
         rmrf(in_dir)
         rmrf(out_dir)
 
-    r = Response(stream, mimetype="application/gzip")
+    r = Response(stream, mimetype="application/gzip", status=200 if status else 400)
     if not status:
         r.headers.add('warning', "Compilation reported a failure")
 
