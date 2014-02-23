@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'FantasqueSansMono-BoldItalic';
+    src: url('FantasqueSansMono-BoldItalic.eot'); /* IE 9 Compatibility Mode */
+    src: url('FantasqueSansMono-BoldItalic.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+         url('FantasqueSansMono-BoldItalic.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+         url('FantasqueSansMono-BoldItalic.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('FantasqueSansMono-BoldItalic.svg#FantasqueSansMono-BoldItalic') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+@font-face {
+    font-family: 'FantasqueSansMono-Bold';
+    src: url('FantasqueSansMono-Bold.eot'); /* IE 9 Compatibility Mode */
+    src: url('FantasqueSansMono-Bold.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+         url('FantasqueSansMono-Bold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+         url('FantasqueSansMono-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('FantasqueSansMono-Bold.svg#FantasqueSansMono-Bold') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+@font-face {
+    font-family: 'FantasqueSansMono-RegItalic';
+    src: url('FantasqueSansMono-RegItalic.eot'); /* IE 9 Compatibility Mode */
+    src: url('FantasqueSansMono-RegItalic.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+         url('FantasqueSansMono-RegItalic.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+         url('FantasqueSansMono-RegItalic.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('FantasqueSansMono-RegItalic.svg#FantasqueSansMono-RegItalic') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+@font-face {
+    font-family: 'FantasqueSansMono-Regular';
+    src: url('FantasqueSansMono-Regular.eot'); /* IE 9 Compatibility Mode */
+    src: url('FantasqueSansMono-Regular.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+         url('FantasqueSansMono-Regular.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+         url('FantasqueSansMono-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('FantasqueSansMono-Regular.svg#FantasqueSansMono-Regular') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+

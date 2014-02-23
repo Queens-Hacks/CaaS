@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Precomp</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/cloud.png') }}" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Varela+Round" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/monospace.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  </head>
+  <body>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

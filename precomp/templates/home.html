@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="container">
+    <header>
+      <h1>
+        <img src="{{ url_for('static', filename='img/cloud.svg') }}" alt="Precomp Logo"/>
+        Precomp
+        <small>
+          simplify your stack
+        </small>
+      </h1>
+
+      <div class="account-buttons">
+        <a class="button" href="#">Sign up</a>
+        <a class="button" href="#">Log in</a>
+      </div>
+    </header>
+
+    <main>
+      <h2>.on(&ldquo;<em class="command">ctrl+<strong>s</strong></em>&rdquo;)</h2>
+
+      <div class="explain">
+
+        <div class="machine dev-machine">
+          <h3>Your development box</h3>
+          <pre class="box">
+  /static
+<div class="source">    /sass
+      <span class="file">_variables.sass</span>
+      <span class="file">_layout.sass</span>
+      <span class="file">main.sass</span></div>
+<div class="dest">    /css
+      <span class="file"><strong>main.css</strong></span></div>
+</pre>
+        </div>
+        
+        <div class="arrow-right"></div>
+        <div class="arrow-left"></div>
+        
+        <div class="machine precomp-machine">
+          <h3>Super-fast cloud compiler</h3>
+          <div class="box">
+            <img src="{{ url_for('static', filename='img/big-gears.svg') }}">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="clearfix"></div>
+    </main>
+
+  </div>
+
+{% endblock %}

@@ -10,7 +10,7 @@
 
 from werkzeug.exceptions import NotFound
 
-from flask import Flask, url_for, redirect
+from flask import Flask, url_for, redirect, render_template
 
 class SubFlask(Flask):
     def route(self, rule, *args, **kwargs):
@@ -25,9 +25,11 @@ app.config.update(dict(
     DEBUG=True
 ))
 
+
 @app.route("/")
 def home():
-    return "home page"
+    return render_template("home.html")
+
 
 @app.route("/", subdomain="<sub>")
 def get_service(sub):

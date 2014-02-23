@@ -1,0 +1,45 @@
+/* See license at https://github.com/belluzj/fantasque-sans/blob/master/OFL.txt */
+
+@font-face {
+  font-family: 'FantasqueSansMono';
+  font-weight: bold;
+  font-style: italic;
+  src: url('../fonts/FantasqueSansMono-BoldItalic.eot'); /* IE 9 Compatibility Mode */
+  src: url('../fonts/FantasqueSansMono-BoldItalic.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+       url('../fonts/FantasqueSansMono-BoldItalic.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+       url('../fonts/FantasqueSansMono-BoldItalic.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/FantasqueSansMono-BoldItalic.svg#FantasqueSansMono-BoldItalic') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+@font-face {
+  font-family: 'FantasqueSansMono';
+  font-weight: bold;
+  font-style: normal;
+  src: url('../fonts/FantasqueSansMono-Bold.eot'); /* IE 9 Compatibility Mode */
+  src: url('../fonts/FantasqueSansMono-Bold.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+       url('../fonts/FantasqueSansMono-Bold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+       url('../fonts/FantasqueSansMono-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/FantasqueSansMono-Bold.svg#FantasqueSansMono-Bold') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+@font-face {
+  font-family: 'FantasqueSansMono';
+  font-weight: normal;
+  font-style: italic;
+  src: url('../fonts/FantasqueSansMono-RegItalic.eot'); /* IE 9 Compatibility Mode */
+  src: url('../fonts/FantasqueSansMono-RegItalic.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+       url('../fonts/FantasqueSansMono-RegItalic.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+       url('../fonts/FantasqueSansMono-RegItalic.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/FantasqueSansMono-RegItalic.svg#FantasqueSansMono-RegItalic') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+@font-face {
+  font-family: 'FantasqueSansMono';
+  font-weight: normal;
+  font-style: normal;
+  src: url('../fonts/FantasqueSansMono-Regular.eot'); /* IE 9 Compatibility Mode */
+  src: url('../fonts/FantasqueSansMono-Regular.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+       url('../fonts/FantasqueSansMono-Regular.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+       url('../fonts/FantasqueSansMono-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/FantasqueSansMono-Regular.svg#FantasqueSansMono-Regular') format('svg'); /* Chrome < 4, Legacy iOS */
+}
