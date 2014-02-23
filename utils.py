@@ -63,3 +63,7 @@ def untar_to_path(zfile, target):
 
     with tarfile.open(fileobj=zfile, mode='r') as zfile:
         zfile.extractall(path=target)
+
+def untar_stream_to_path(stream, target):
+    zfile = io.BytesIO(stream)
+    untar_to_path(zfile, target)

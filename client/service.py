@@ -1,9 +1,10 @@
 import queue
 import threading
 import requests
+from utils import untar_stream_to_path
 
 class Service(object):
-    
+
     URL = "http://localhost:5000/{0}"
 
     SERVICES = (
@@ -39,9 +40,8 @@ class Service(object):
         r = requests.post(self.URL.format(service), files={"data": stream})
         if not r.ok:
             return None
-        
-        with open("temp.zip", "wb") as f:
-            f.write(r.content)
+        else:
+            return r.content
 
 
     def serve_forever(self):
@@ -56,7 +56,9 @@ class Service(object):
             conf, stream, callback = temp
 
             try:
-                self.send(conf['type'], stream)
+                content = self.send(conf['type'], stream)
+                if content is not None:
+                    untar_stream_to_path(content, conf['output'])
             finally:
                 # Make sure to always call the callback
                 callback()

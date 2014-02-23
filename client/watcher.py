@@ -22,6 +22,12 @@ class Watcher(threading.Thread):
         if not os.path.exists(self.conf['input']):
             raise Exception("Folder '{0}' does not exist".format(self.conf['input']))
 
+        if not os.path.exists(self.conf['output']):
+            try:
+                os.mkdir(self.conf['output'])
+            except:
+                raise Exception("Cannot create output folder '{0}'".format(self.conf['output']))
+
         for dirpath, dirname, filenames in os.walk(self.conf['input']):
             for f in filenames:
                 path = os.path.join(dirpath, f)
