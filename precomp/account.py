@@ -211,3 +211,8 @@ def toggle_compiler_state():
     current_user.compiler_state = 'off' if current_user.compiler_state == 'on' else 'on'
     current_user.save()
     return redirect(url_for('account'))
+
+
+@app.errorhandler(404)
+def page_not_found(err):
+    return render_template('error.html', error_header=err)
