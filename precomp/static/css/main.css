@@ -253,7 +253,7 @@ pre {
 .message {
   position: relative;
   width: 66.667%;
-  margin: 0 auto;
+  margin: 0 auto 3em;
 }
 .message .dismiss {
   position: absolute;
