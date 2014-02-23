@@ -85,4 +85,5 @@ def less_proc(in_dir, out_dir):
     code, output = system_call(("coffee", "-c", "-o", out_dir, in_dir))
 
     output_logs(out_dir, code, output)
-    return code
+
+    return code == 0
