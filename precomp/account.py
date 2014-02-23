@@ -12,6 +12,7 @@ from os import urandom
 from base64 import urlsafe_b64encode
 from urllib.parse import urlparse, urljoin, parse_qsl
 from bson.objectid import ObjectId
+import requests
 from requests.sessions import Session
 from requests.utils import default_user_agent
 from rauth.service import OAuth2Session, OAuth2Service
@@ -25,6 +26,14 @@ from precomp import app, processors
 
 
 GH_BASE_URL = 'https://api.github.com/'
+DO_BASE_URL = 'https://api.digitalocean.com/'
+
+# note: hard-coding ids for the hackathon; these should be dynamically fetched
+# over the DO api (possibly with an admin UI for precomp)
+DO_SIZE_ID = 62
+DO_IMAGE_ID = 2396128
+DO_REGION_ID = 4
+DO_PRIVATE_NETWORKING = True
 
 
 login_manager = LoginManager(app)
@@ -122,6 +131,7 @@ class User(kale.Model, UserMixin):
                 avatar_url=user_obj.get('avatar_url'),
                 access_token=session.access_token,
                 compiler_state='off',
+                droplet_id=None,
             )
             user.generate_key()
             user.save()
@@ -208,6 +218,56 @@ def dismiss_welcome():
 @app.route('/toggle-compiler-state')
 @login_required
 def toggle_compiler_state():
-    current_user.compiler_state = 'off' if current_user.compiler_state == 'on' else 'on'
+    if current_user.compiler_state == 'off':
+        if current_user.droplet_id is None:
+            droplet_id = create_compiler(current_user.username)
+            current_user.droplet_id = droplet_id
+        else:
+            start_compiler(current_user.droplet_id)
+        current_user.compiler_state = 'on'
+    else:
+        stop_compiler(current_user.droplet_id)
+        current_user.compiler_state = 'off'
     current_user.save()
     return redirect(url_for('account'))
+
+
+def create_compiler(name):
+    params = {
+        'name': name,
+        'client_id': 'Ej0wEYLV0DMcz6XQlcMpJ',
+        'api_key': '6d8536c838700bfb95c1320933a95fb9',
+        'size_id': DO_SIZE_ID,
+        'image_id': DO_IMAGE_ID,
+        'region_id': DO_REGION_ID,
+        'private_networking': DO_PRIVATE_NETWORKING,
+    }
+    url = DO_BASE_URL + 'droplets/new'
+    response = requests.get(url, params=params)
+    assert response.ok, 'digital ocean didnt like that'
+    data = response.json()
+    return data['droplet']['id']
+
+
+def start_compiler(droplet_id):
+    params = {
+        'client_id': 'Ej0wEYLV0DMcz6XQlcMpJ',
+        'api_key': '6d8536c838700bfb95c1320933a95fb9',
+    }
+    url = DO_BASE_URL + 'droplets/{}/power_on'.format(droplet_id)
+    response = requests.get(url, params=params)
+    assert response.ok, 'digitalocean thought that was no good'
+    data = response.json()
+    return True
+
+
+def stop_compiler(droplet_id):
+    params = {
+        'client_id': 'Ej0wEYLV0DMcz6XQlcMpJ',
+        'api_key': '6d8536c838700bfb95c1320933a95fb9',
+    }
+    url = DO_BASE_URL + 'droplets/{}/power_off'.format(droplet_id)
+    response = requests.get(url, params=params)
+    assert response.ok, 'digitalocean thought that was no good'
+    data = response.json()
+    return True
