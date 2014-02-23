@@ -8,15 +8,6 @@ class Service(object):
 
     URL = "http://localhost:5000/{0}"
 
-    SERVICES = (
-        "coffescript",
-        "sass",
-        "scss",
-        "less",
-        "haml",
-        "mirror",
-    )
-
     def __init__(self):
         """In the future sign into the API"""
 
@@ -26,8 +17,6 @@ class Service(object):
 
     def process(self, conf, stream, callback):
         """Adds an request to the queue"""
-        if not conf['type'] in self.SERVICES:
-            raise Exception("'{0}' is not a valid service type".format(conf['type']))
 
         self.queue.put_nowait((conf, stream, callback))
 
@@ -44,7 +33,7 @@ class Service(object):
             return None
         else:
             return r.content
-    
+
     def extract_response(self, content, out_dir):
         if content is None:
             return

@@ -53,13 +53,17 @@ class Watcher(threading.Thread):
             if self.watch():
                 print ("{0}: Files changed, recompiling...".format(self.name_))
                 stream = tar_paths(self.conf['input'])
-                self.lock.acquire()
-                self.service.process(self.conf, stream, self.unlock)
+                if stream is None:
+                    print ("Failed to pack files")
 
-                # Wait until the job is processed before continuing
-                self.lock.acquire()
-                self.lock.release()
-                print ("{0}: Finished recompiling, new files in '{1}'".format(self.name_, self.conf['output']))
+                else:
+                    self.lock.acquire()
+                    self.service.process(self.conf, stream, self.unlock)
+
+                    # Wait until the job is processed before continuing
+                    self.lock.acquire()
+                    self.lock.release()
+                    print ("{0}: Finished recompiling, new files in '{1}'".format(self.name_, self.conf['output']))
             time.sleep(self.conf['interval'])
 
     def unlock(self):
