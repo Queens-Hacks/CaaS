@@ -83,7 +83,8 @@ def sass_proc(in_dir, out_dir):
     MAIN_SASS = "main.sass"
     OUTPUT_FILE = "main.css"
 
-    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
+    if os.path.exists(os.path.join(in_dir, MAIN_SASS)):
+        code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
 
     output_logs(out_dir, code, output)
 
@@ -93,7 +94,19 @@ def scss_proc(in_dir, out_dir):
     MAIN_SCSS = "main.scss"
     OUTPUT_FILE = "main.css"
 
-    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
+    if os.path.exists(os.path.join(in_dir, MAIN_SCSS)):
+        code, output = system_call(("sass", os.path.join(in_dir, MAIN_SCSS), os.path.join(out_dir, OUTPUT_FILE)))
+
+    output_logs(out_dir, code, output)
+
+@processor('less')
+def less_proc(in_dir, out_dir):
+    """compiles main.sass in the input directory"""
+    MAIN_LESS = "main.less"
+    OUTPUT_FILE = "main.css"
+
+    if os.path.exists(os.path.join(in_dir, MAIN_LESS)):
+        code, output = system_call(("lessc", os.path.join(in_dir, MAIN_LESS), os.path.join(out_dir, OUTPUT_FILE)))
 
     output_logs(out_dir, code, output)
 
