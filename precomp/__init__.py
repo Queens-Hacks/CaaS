@@ -86,7 +86,7 @@ from . import account
 from . import processes
 
 
-@app.route("/<processor>", methods=['POST'])
+@app.route("/<processor>/", methods=['POST'])
 def get_service(processor):
     """routes subdomains to the right service"""
 
