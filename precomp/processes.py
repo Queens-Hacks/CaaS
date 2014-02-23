@@ -75,6 +75,7 @@ def gccmake_proc(in_dir, out_dir):
         if os.path.exists(os.path.join(in_dir, filename)):
             shutil.copy2(os.path.join(in_dir, filename), os.path.join(out_dir, filename))
 
+    output_logs(out_dir, code, output)
     return True
 
 

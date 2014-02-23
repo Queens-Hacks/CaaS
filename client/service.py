@@ -62,7 +62,10 @@ class Service(object):
             try:
                 msg = "ERROR: Couldn't communicate properly with the server"
                 extras = conf.get('extras', None)
-                r = requests.post(self.URL.format(conf['compiler']), params={"key": self.key}, files={"data": stream}, data=extras)
+                if extras:
+                    r = requests.post(self.URL.format(conf['compiler']), files={"data": stream}, data=extras)
+                else:
+                    r = requests.post(self.URL.format(conf['compiler']), files={"data": stream}, data=extras)
                 if r.ok:
                     msg = "ERROR: Failed to extract the response from the server"
                     msg = self.extract_response(r, conf['output'])
