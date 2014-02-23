@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import tempfile
-from os import environ
-from shutil import rmtree
+import os
+import shutil
+import subprocess
 from utils import tar_paths, untar_to_path
 from werkzeug.exceptions import NotFound
 from flask import Flask, url_for, redirect, render_template, request, Response
@@ -17,11 +18,11 @@ class SubFlask(Flask):
 app = SubFlask(__name__)
 try:
     app.config.update(
-        DEBUG=environ.get('DEBUG') == 'True',
-        SECRET_KEY=environ['SECRET_KEY'],
-        MONGO_URI=environ['MONGO_URI'],
-        GITHUB_CLIENT_ID=environ['GITHUB_CLIENT_ID'],
-        GITHUB_CLIENT_SECRET=environ['GITHUB_CLIENT_SECRET'],
+        DEBUG=os.environ.get('DEBUG') == 'True',
+        SECRET_KEY=os.environ['SECRET_KEY'],
+        MONGO_URI=os.environ['MONGO_URI'],
+        GITHUB_CLIENT_ID=os.environ['GITHUB_CLIENT_ID'],
+        GITHUB_CLIENT_SECRET=os.environ['GITHUB_CLIENT_SECRET'],
     )
 except KeyError as e:
     from .config import CONFIG
@@ -31,31 +32,27 @@ except KeyError as e:
 # we can import other stuff now that we have a reference to app.
 from . import account
 
-
 @app.route("/")
 def home():
     return render_template("home.html")
 
 
+def rmrf(path):
+    """Just delete it, dude"""
+    
+    if os.path.isdir(path):
+        shutil.rmtree(path)
+    elif os.path.exists(path):
+        os.remove(path)
 
-def unpack_file(zfile):
-    """Unpacks files and returns the path"""
+def system_call(args):
+    p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    ret = p.communicate()
+    print (p.returncode) # return code
+    print (p[0]) # stdout
+    print (p[1]) # stderr
 
-    temp_dir = tempfile.mkdtemp()
-
-    untar_to_path(zfile, temp_dir)
-
-    return temp_dir
-
-
-def pack_and_clean(directory):
-    """Compresses the files in the directory and then deletes the directory"""
-
-    stream = tar_paths(directory)
-
-    rmtree(directory)
-
-    return stream
+    return p
 
 
 processors = {}
@@ -66,18 +63,19 @@ def processor(lang):
         return func
     return decorate
 
-@processor('sass')
-def sass_proc(input_dir):
 
+@processor('sass')
+def sass_proc(in_dir, out_dir):
+
+    p = system_call(("git", "status"))
     # output_dir = tempfile.mkdtemp()
     # process stuff
-
-    return input_dir
 
 
 @app.route("/<processor>", methods=['POST'])
 def get_service(processor):
     """routes subdomains to the right service"""
+
     if processor not in processors:
         return Response ("invalid processor {}".format(processor), status=400)
 
@@ -90,10 +88,18 @@ def get_service(processor):
     elif request.files['data'] is None:
         return Response ("form key should be 'data'", status=400)
 
-    temp_dir = unpack_file(request.files['data'])
-
-    output_dir = (processors[processor])(temp_dir)
-
-    data = pack_and_clean(temp_dir)
+    in_dir = tempfile.mkdtemp()
+    out_dir = tempfile.mkdtemp()
+    
+    try:
+        untar_to_path(request.files['data'], in_dir)
+    
+        # Compile the code
+        (processors[processor])(in_dir, out_dir)
+    
+        stream = tar_paths(out_dir)
+    finally:
+        rmrf(in_dir)
+        rmrf(out_dir)
 
     return Response(data, mimetype="application/gzip")
