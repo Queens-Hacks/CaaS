@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 import tempfile
 import os
-import glob
 import subprocess
 from utils import tar_paths, untar_to_path, rmrf
-from werkzeug.exceptions import NotFound
 from flask import Flask, url_for, redirect, render_template, request, Response
-import re
-import shutil
 
 class SubFlask(Flask):
     def route(self, rule, *args, **kwargs):
@@ -34,8 +30,7 @@ except KeyError as e:
     app.config.update(CONFIG)
 
 
-# we can import other stuff now that we have a reference to app.
-from . import account
+processors = {}
 
 
 def output_logs(out_dir, code, output):
@@ -61,72 +56,17 @@ def system_call(args):
         return (255, (None, "Server error: {0} - {1}".format(type(e).__name__, e).encode("utf-8")))
 
 
-processors = {}
-
 def processor(lang):
     def decorate(func):
         processors[lang] = func
         return func
     return decorate
 
-@processor('mirror')
-def mirror_proc(in_dir, out_dir):
-    """Just mirrors the input directory"""
-    files = glob.glob(os.path.join(in_dir, "*"))
-    code, output = system_call(["cp", "-vr"] + files + [out_dir])
-    output_logs(out_dir, code, output)
-    return code
 
-@processor('sass')
-def sass_proc(in_dir, out_dir):
-    """compiles main.sass in the input directory"""
-    MAIN_SASS = "main.sass"
-    OUTPUT_FILE = "main.css"
+# we can import other stuff now that we have a reference to app and everything.
+from . import account
+from . import processors
 
-    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
-
-    output_logs(out_dir, code, output)
-    return code
-
-@processor('scss')
-def scss_proc(in_dir, out_dir):
-    """compiles main.scss in the input directory"""
-    MAIN_SCSS = "main.scss"
-    OUTPUT_FILE = "main.css"
-
-    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SCSS), os.path.join(out_dir, OUTPUT_FILE)))
-
-    output_logs(out_dir, code, output)
-    return code
-
-@processor('less')
-def less_proc(in_dir, out_dir):
-    """compiles main.less in the input directory"""
-    MAIN_LESS = "main.less"
-    OUTPUT_FILE = "main.css"
-
-    code, output = system_call(("lessc", os.path.join(in_dir, MAIN_LESS), os.path.join(out_dir, OUTPUT_FILE)))
-
-    output_logs(out_dir, code, output)
-    return code
-
-@processor('gccmake')
-def gccmake_proc(in_dir, out_dir):
-    """runs make in the input directory"""
-    MAKEFILE = "makefile"
-
-    os.chdir(in_dir)
-    code, output = system_call(("make"))
-
-    with open(os.path.join(in_dir, MAKEFILE), 'r') as mkfile:
-        out_files = re.findall('(?<=-o)\s+\S+', mkfile.read())
-
-    for filename in out_files:
-        filename = filename.strip()
-        if os.path.exists(os.path.join(in_dir, filename)):
-            shutil.copy2(os.path.join(in_dir, filename), os.path.join(out_dir, filename))
-
-    output_logs(out_dir, code, output)
 
 @app.route("/<processor>", methods=['POST'])
 def get_service(processor):

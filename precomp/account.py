@@ -10,7 +10,6 @@
 
 from os import urandom
 from base64 import urlsafe_b64encode
-from precomp import app
 from urllib.parse import urlparse, urljoin, parse_qsl
 from bson.objectid import ObjectId
 from requests.sessions import Session
@@ -22,6 +21,7 @@ from flask.ext.login import (LoginManager, login_user, logout_user, UserMixin,
                              current_user, login_required)
 from flask.ext.pymongo import PyMongo
 from flask.ext.kale import Kale
+from precomp import app, processors
 
 
 GH_BASE_URL = 'https://api.github.com/'
@@ -100,9 +100,6 @@ def get_mongodb():
 
 
 class User(kale.Model, UserMixin):
-
-    _collection_name = 'users'
-
     """
     {
       username: github "login",
@@ -111,6 +108,8 @@ class User(kale.Model, UserMixin):
       access_token: github 40 char token,
     }
     """
+
+    _collection_name = 'users'
 
     @classmethod
     def gh_get_or_create(cls, session):
