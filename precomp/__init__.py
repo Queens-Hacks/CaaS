@@ -15,13 +15,17 @@ class SubFlask(Flask):
         return super(SubFlask, self).route(rule, *args, **kwargs)
 
 app = SubFlask(__name__)
-app.config.update(
-    DEBUG=environ.get('DEBUG') == 'True',
-    SECRET_KEY=environ['SECRET_KEY'],
-    MONGO_URI=environ['MONGO_URI'],
-    GITHUB_CLIENT_ID=environ['GITHUB_CLIENT_ID'],
-    GITHUB_CLIENT_SECRET=environ['GITHUB_CLIENT_SECRET'],
-)
+try:
+    app.config.update(
+        DEBUG=environ.get('DEBUG') == 'True',
+        SECRET_KEY=environ['SECRET_KEY'],
+        MONGO_URI=environ['MONGO_URI'],
+        GITHUB_CLIENT_ID=environ['GITHUB_CLIENT_ID'],
+        GITHUB_CLIENT_SECRET=environ['GITHUB_CLIENT_SECRET'],
+    )
+except KeyError as e:
+    from .config import CONFIG
+    app.config.update(CONFIG)
 
 
 # we can import other stuff now that we have a reference to app.

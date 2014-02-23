@@ -2,6 +2,8 @@
 
 venv
 
+precomp/config.py
+
 # C extensions
 *.so
 
