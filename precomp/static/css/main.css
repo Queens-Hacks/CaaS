@@ -2,6 +2,7 @@ body {
   background: #38c3d2;
   color: white;
   font-family: 'Varela Round', sans-serif;
+  line-height: 1.25em
 }
 
 h1,
@@ -53,11 +54,29 @@ h2 em {
 
 
 .button {
-  padding: 0.5em 1.5em;
+  display: inline-block;
+  line-height: 2.25em;
+  height: 2.25em;
+  padding: 0 1.5em;
   font-weight: bold;
   color: #38c3d2;
   background: white;
   text-decoration: none;
+  vertical-align: middle;
+}
+.button.image-container {
+  vertical-align: middle;
+  display: inline-block;
+  padding: 0;
+  overflow: hidden;
+  line-height: 1.25em;
+  height: 2.25em
+}
+.button.image-container img {
+  display: inline-block;
+  width: 2.25em;
+  /*line-height: 1em;*/
+  height: 2.25em;
 }
 .button:first-of-type {
   border-top-left-radius: 0.3em;
@@ -147,7 +166,7 @@ pre {
 }
 .arrow-left {
   left: 315px;
-  top: 9.4em;
+  top: 10.4em;
   background: rgba(255, 255, 255, 0.5);
 }
 .arrow-left:after {

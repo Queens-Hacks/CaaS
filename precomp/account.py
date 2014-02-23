@@ -122,6 +122,12 @@ class User(kale.Model, UserMixin):
                 access_token=session.access_token,
             )
             user.save()
+        fresh = lambda k: user_obj.get(k) != user[k] and user[k] is not None
+        newly_updated = filter(fresh, ('name', 'avatar_url'))
+        if newly_updated:
+            for prop in newly_updated:
+                user[prop] = user_obj.get(prop)
+            user.save()
         return user
 
     def get_id(self):
@@ -168,4 +174,4 @@ def logout():
 @app.route('/account')
 @login_required
 def account():
-    return 'your account yo, {}'.format(current_user.name)
+    return render_template('account.html')
