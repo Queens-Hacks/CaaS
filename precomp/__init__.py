@@ -42,7 +42,7 @@ def home():
 
 def rmrf(path):
     """Just delete it, dude"""
-    
+
     if os.path.isdir(path):
         shutil.rmtree(path)
     elif os.path.exists(path):
@@ -79,8 +79,22 @@ def processor(lang):
 
 @processor('sass')
 def sass_proc(in_dir, out_dir):
+    """compiles main.sass in the input directory"""
+    MAIN_SASS = "main.sass"
+    OUTPUT_FILE = "main.css"
 
-    code, output = system_call(("git", "status"))
+    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
+
+    output_logs(out_dir, code, output)
+
+@processor('scss')
+def scss_proc(in_dir, out_dir):
+    """compiles main.sass in the input directory"""
+    MAIN_SCSS = "main.scss"
+    OUTPUT_FILE = "main.css"
+
+    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
+
     output_logs(out_dir, code, output)
 
 @app.route("/<processor>", methods=['POST'])
@@ -101,13 +115,13 @@ def get_service(processor):
 
     in_dir = tempfile.mkdtemp()
     out_dir = tempfile.mkdtemp()
-    
+
     try:
         untar_to_path(request.files['data'], in_dir)
-    
+
         # Compile the code
         (processors[processor])(in_dir, out_dir)
-    
+
         stream = tar_paths(out_dir)
     finally:
         rmrf(in_dir)
