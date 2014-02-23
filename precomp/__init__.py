@@ -45,14 +45,24 @@ def rmrf(path):
     elif os.path.exists(path):
         os.remove(path)
 
+def output_logs(out_dir, code, output):
+    log_dir = os.path.join(out_dir, "__precomp__")
+    os.mkdir(log_dir)
+
+    names = ("out", "err")
+    for i in range(2):
+        if output[i]:
+            with open(os.path.join(log_dir, "std{0}.txt".format(names[i])), 'w') as f:
+                f.write(output[i].decode("utf-8"))
+
+    # Ugly hack - find a better way
+    open(os.path.join(log_dir, "EXIT STATUS - {0}".format(code)), 'a').close()
+
+
 def system_call(args):
     p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     ret = p.communicate()
-    print (p.returncode) # return code
-    print (p[0]) # stdout
-    print (p[1]) # stderr
-
-    return p
+    return (p.returncode, ret)
 
 
 processors = {}
@@ -67,26 +77,24 @@ def processor(lang):
 @processor('sass')
 def sass_proc(in_dir, out_dir):
 
-    p = system_call(("git", "status"))
-    # output_dir = tempfile.mkdtemp()
-    # process stuff
-
+    code, output = system_call(("git", "status"))
+    output_logs(out_dir, code, output)
 
 @app.route("/<processor>", methods=['POST'])
 def get_service(processor):
     """routes subdomains to the right service"""
 
     if processor not in processors:
-        return Response ("invalid processor {}".format(processor), status=400)
+        return Response ("Invalid processor {0}".format(processor), status=400)
 
     elif request.files is None:
-        return Response ("no files recieved, should be 1", status=400)
+        return Response ("No files recieved, should be 1", status=400)
 
     elif len(request.files) != 1:
-        return Response ("should send 1 file, sent {}".format(len(request.files)), status=400)
+        return Response ("Should send 1 file, sent {0} instead".format(len(request.files)), status=400)
 
     elif request.files['data'] is None:
-        return Response ("form key should be 'data'", status=400)
+        return Response ("Form key should be 'data'", status=400)
 
     in_dir = tempfile.mkdtemp()
     out_dir = tempfile.mkdtemp()
@@ -102,4 +110,4 @@ def get_service(processor):
         rmrf(in_dir)
         rmrf(out_dir)
 
-    return Response(data, mimetype="application/gzip")
+    return Response(stream, mimetype="application/gzip")
