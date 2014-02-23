@@ -1,5 +1,8 @@
 debug:
-  type: "sass"
+  type: "less"
   input: "client"
   output: "sample_compiled_output_dir"
   interval: 1
+  extras:
+    logging: on
+    targets: ["main.less", "style.less"]

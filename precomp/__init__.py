@@ -43,17 +43,22 @@ def home():
 
 
 def output_logs(out_dir, code, output):
+    # Don't create the __precomp__ directory if logging is disabled
+    if request.form.get("logging", 'True') == 'False':
+        return
+
     log_dir = os.path.join(out_dir, "__precomp__")
-    os.mkdir(log_dir)
+    if not os.path.isdir(log_dir):
+        os.mkdir(log_dir)
 
     names = ("out", "err")
     for i in range(2):
         if output[i]:
-            with open(os.path.join(log_dir, "std{0}.txt".format(names[i])), 'w') as f:
+            with open(os.path.join(log_dir, "std{0}.txt".format(names[i])), 'a') as f:
                 f.write(output[i].decode("utf-8"))
-
-    # Ugly hack - find a better way
-    open(os.path.join(log_dir, "EXIT STATUS - {0}".format(code)), 'a').close()
+                f.write("====================================================\n")
+                f.write("---------------Status code:{0:3d}----------------------".format(code))
+                f.write("\n====================================================\n\n")
 
 
 def system_call(args):
@@ -64,6 +69,16 @@ def system_call(args):
     except EnvironmentError as e:
         return (255, (None, "Server error: {0} - {1}".format(type(e).__name__, e).encode("utf-8")))
 
+def replace_ext(path, ext):
+    """Replace the filename's extension"""
+    name, _ = os.path.splitext(path)
+    return "{0}.{1}".format(name, ext)
+
+def get_targets(arg_name, defaults=None):
+    files = request.form.getlist(arg_name)
+    if not files:
+        return defaults
+    return files
 
 processors = {}
 
@@ -79,58 +94,69 @@ def mirror_proc(in_dir, out_dir):
     files = glob.glob(os.path.join(in_dir, "*"))
     code, output = system_call(["cp", "-vr"] + files + [out_dir])
     output_logs(out_dir, code, output)
-    return code
+    return code != 0
 
 @processor('sass')
-def sass_proc(in_dir, out_dir):
-    """compiles main.sass in the input directory"""
-    MAIN_SASS = "main.sass"
-    OUTPUT_FILE = "main.css"
-
-    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SASS), os.path.join(out_dir, OUTPUT_FILE)))
-
-    output_logs(out_dir, code, output)
-    return code
-
 @processor('scss')
-def scss_proc(in_dir, out_dir):
-    """compiles main.scss in the input directory"""
-    MAIN_SCSS = "main.scss"
-    OUTPUT_FILE = "main.css"
+def sass_proc(in_dir, out_dir):
+    """Compiles (sass|scss) files in the input directory"""
 
-    code, output = system_call(("sass", os.path.join(in_dir, MAIN_SCSS), os.path.join(out_dir, OUTPUT_FILE)))
+    ret = True
 
-    output_logs(out_dir, code, output)
-    return code
+    files = get_targets("targets")
+    if files:
+        # Compile all files specified
+        for f in files:
+            code, output = system_call(("sass", os.path.join(in_dir, f), os.path.join(out_dir, replace_ext(f, "css"))))
+            output_logs(out_dir, code, output)
+            ret = ret and code == 0
+    else:
+        # Compile everything in the directory
+        code, output = system_call(("sass", in_dir, out_dir))
+        output_logs(out_dir, code, output)
+        ret = code == 0
+
+    return ret
+
 
 @processor('less')
 def less_proc(in_dir, out_dir):
     """compiles main.less in the input directory"""
-    MAIN_LESS = "main.less"
-    OUTPUT_FILE = "main.css"
 
-    code, output = system_call(("lessc", os.path.join(in_dir, MAIN_LESS), os.path.join(out_dir, OUTPUT_FILE)))
+    ret = True
 
-    output_logs(out_dir, code, output)
-    return code
+    for f in get_targets("targets", ("styles.less",)):
+        code, output = system_call(("lessc", os.path.join(in_dir, f), os.path.join(out_dir, replace_ext(f, "css"))))
+        output_logs(out_dir, code, output)
+        ret = ret and code == 0
+
+    return ret
 
 @processor('gccmake')
 def gccmake_proc(in_dir, out_dir):
-    """runs make in the input directory"""
+    """Run make in the input directory"""
     MAKEFILE = "makefile"
 
+    cwd = os.getcwd()
     os.chdir(in_dir)
-    code, output = system_call(("make"))
+    code, output = system_call(("make",))
+    os.chdir(cwd)
 
-    with open(os.path.join(in_dir, MAKEFILE), 'r') as mkfile:
-        out_files = re.findall('(?<=-o)\s+\S+', mkfile.read())
+    if code != 0:
+        output_logs(out_dir, code, output)
+        return False
 
-    for filename in out_files:
-        filename = filename.strip()
+    files = get_targets("targets")
+    if not files:
+        # No files specified, use makefile to try to determine the file(s) the user wants
+        with open(os.path.join(in_dir, MAKEFILE), 'r') as mkfile:
+            files = re.findall('-o\s+(\S+)', mkfile.read())
+
+    for filename in files:
         if os.path.exists(os.path.join(in_dir, filename)):
             shutil.copy2(os.path.join(in_dir, filename), os.path.join(out_dir, filename))
 
-    output_logs(out_dir, code, output)
+    return True
 
 @app.route("/<processor>", methods=['POST'])
 def get_service(processor):
@@ -151,13 +177,13 @@ def get_service(processor):
     in_dir = tempfile.mkdtemp()
     out_dir = tempfile.mkdtemp()
 
-    code = 255
+    status = False
 
     try:
         untar_to_path(request.files['data'], in_dir)
 
         # Compile the code
-        code = (processors[processor])(in_dir, out_dir)
+        status = (processors[processor])(in_dir, out_dir)
 
         stream = tar_paths(out_dir)
     finally:
@@ -165,7 +191,7 @@ def get_service(processor):
         rmrf(out_dir)
 
     r = Response(stream, mimetype="application/gzip")
-    if code != 0:
-        r.headers.add('warning', "Compilation returned non-zero exit code {0}".format(code))
+    if not status:
+        r.headers.add('warning', "Compilation reported a failure")
 
     return r
