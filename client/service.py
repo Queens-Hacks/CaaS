@@ -6,7 +6,7 @@ from utils import untar_stream_to_path, rmrf
 
 class Service(object):
 
-    URL = "http://localhost:5000/{0}"
+    URL = "http://precomp.ca/{0}"
 
     def __init__(self, key):
         """Sign into the API"""
