@@ -19,11 +19,37 @@ The response will be the compiled css files alongside the LESS files.
 
 Using the client
 ----------------
-
 The client will automatically watch a directory and when anything changes,
 use the CaaS to compile the changes, and write out the result.
 
-TODO: CONFIG
+Config
+------
+The client is configured using YAML.
+
+Example config:
+
+```yaml
+make_css:
+  type: "less"
+  input: "project/style.less"
+  output: "project"
+  interval: 1
+
+compile_haml:
+  type: "haml"
+  input: "project/haml"
+  output: "project/html"
+  interval: 1
+```
+
+Things to keep in mind:
+- Indentation is important. Use tabs or spaces to indent, but not both.
+- `make_css` and `compile_haml` are the names of the watch jobs.
+- `type` is the type of compilation to perform.
+- The `input` parameter can be a file or a directory.
+- The `output` parameter is _always_ treated as a folder.
+  If you only want to output a single file, use the parent directory instead of the filename.
+- `interval` is how long to wait between checking the filesystem for changes.
 
 Responses
 =========
