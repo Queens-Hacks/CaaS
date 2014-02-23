@@ -22,6 +22,8 @@ try:
         MONGO_URI=os.environ['MONGO_URI'],
         GITHUB_CLIENT_ID=os.environ['GITHUB_CLIENT_ID'],
         GITHUB_CLIENT_SECRET=os.environ['GITHUB_CLIENT_SECRET'],
+        DO_CLIENT_ID=os.environ['DO_CLIENT_ID'],
+        DO_API_KEY=os.environ['DO_API_KEY'],
     )
 except KeyError as e:
     try:
@@ -89,7 +91,7 @@ def get_service(processor):
     """routes subdomains to the right service"""
 
     if processor not in processors:
-        return Response ("Invalid processor '{0}'. Valid processors are: {1}".format(processor, ", ".join(processors)), status=400)
+        return Response ("Invalid compiler '{0}'. Valid compilers are: {1}".format(processor, ", ".join(processors)), status=400)
 
     elif request.files is None:
         return Response ("No files recieved, should be 1", status=400)

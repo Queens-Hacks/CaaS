@@ -62,7 +62,7 @@ class Watcher(threading.Thread):
                     # Wait until the job is processed before continuing
                     self.lock.acquire()
                     self.lock.release()
-            time.sleep(self.conf['interval'])
+            time.sleep(2)
 
     def unlock(self, msg):
         print ("{0}: {1}".format(self.name_, msg))

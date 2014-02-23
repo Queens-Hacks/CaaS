@@ -10,10 +10,10 @@ class Manager(object):
         with open(config, "r") as f:
             config = yaml.load(f.read())
 
-        self.s = Service()
+        self.s = Service(config['key'])
 
         self.watchers = []
-        for k, v in config.items():
+        for k, v in config['tasks'].items():
             self.watchers.append(Watcher(k, v, self.s))
 
     def start_watching(self):

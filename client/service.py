@@ -8,9 +8,10 @@ class Service(object):
 
     URL = "http://localhost:5000/{0}"
 
-    def __init__(self):
-        """In the future sign into the API"""
-
+    def __init__(self, key):
+        """Sign into the API"""
+        
+        self.key = key
         self.queue = queue.Queue()
         self.worker = threading.Thread(target=self.serve_forever)
         self.worker.start()
@@ -60,7 +61,9 @@ class Service(object):
 
             try:
                 msg = "ERROR: Couldn't communicate properly with the server"
-                r = requests.post(self.URL.format(conf['type']), files={"data": stream}, data=conf['extras'])
+                data = conf['extras']
+                data['key'] = self.key
+                r = requests.post(self.URL.format(conf['compiler']), files={"data": stream}, data=data)
                 if r.ok:
                     msg = "ERROR: Failed to extract the response from the server"
                     msg = self.extract_response(r, conf['output'])
