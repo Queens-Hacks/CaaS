@@ -76,3 +76,14 @@ def gccmake_proc(in_dir, out_dir):
             shutil.copy2(os.path.join(in_dir, filename), os.path.join(out_dir, filename))
 
     return True
+
+
+@processor('coffee')
+def less_proc(in_dir, out_dir):
+    """compiles main.less in the input directory"""
+
+    code, output = system_call(("coffee", "-c", "-o", out_dir, in_dir))
+
+    output_logs(out_dir, code, output)
+
+    return code == 0
