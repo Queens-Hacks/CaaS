@@ -122,7 +122,6 @@ class User(kale.Model, UserMixin):
                 access_token=session.access_token,
             )
             user.save()
-        print(user)
         return user
 
     def get_id(self):
