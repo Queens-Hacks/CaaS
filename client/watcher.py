@@ -1,7 +1,7 @@
 import threading
 import time
 import os
-from utils import zip_paths
+from utils import tar_paths
 
 class Watcher(threading.Thread):
 
@@ -25,7 +25,7 @@ class Watcher(threading.Thread):
         for dirpath, dirname, filenames in os.walk(self.conf['input']):
             for f in filenames:
                 path = os.path.join(dirpath, f)
-            
+
                 # Only store time modified
                 self.curr.add(os.path.getmtime(path))
 
@@ -45,7 +45,7 @@ class Watcher(threading.Thread):
         """Watch the specified directory"""
         while not self.stop.is_set():
             if self.watch():
-                stream = zip_paths(self.conf['input'])
+                stream = tar_paths(self.conf['input'])
                 self.lock.acquire()
                 self.service.process(self.conf, stream, self.unlock)
 
