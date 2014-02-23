@@ -22,7 +22,7 @@ class Watcher(threading.Thread):
         if not os.path.exists(self.conf['input']):
             raise Exception("Folder '{0}' does not exist".format(self.conf['input']))
 
-        if not os.path.exists(self.conf['output']):
+        if not os.path.isdir(self.conf['output']):
             try:
                 os.mkdir(self.conf['output'])
             except:
