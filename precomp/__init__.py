@@ -90,7 +90,7 @@ from . import processes
 def get_service(processor):
     """routes subdomains to the right service"""
 
-    if not account.User.collection.find_one({"key": request.form.get("key")}):
+    if not account.User.collection.find_one({"key": request.args.get("key", "")}):
         return Response ("You must create an account and supply a valid API key to use this service", status=403)
 
     if processor not in processors:
