@@ -177,6 +177,11 @@ def authorized():
     return redirect(url_for('account'))
 
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for('login'))
+
+
 @app.route('/logout')
 def logout():
     logout_user()
