@@ -123,7 +123,7 @@ class User(kale.Model, UserMixin):
                 access_token=session.access_token,
                 compiler_state='off',
             )
-            self.generate_key()
+            user.generate_key()
             user.save()
         fresh = lambda k: user_obj.get(k) != user[k] and user[k] is not None
         newly_updated = filter(fresh, ('name', 'avatar_url'))
