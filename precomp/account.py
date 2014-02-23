@@ -121,7 +121,9 @@ class User(kale.Model, UserMixin):
                 name=user_obj.get('name'),
                 avatar_url=user_obj.get('avatar_url'),
                 access_token=session.access_token,
+                compiler_state='off',
             )
+            self.generate_key()
             user.save()
         fresh = lambda k: user_obj.get(k) != user[k] and user[k] is not None
         newly_updated = filter(fresh, ('name', 'avatar_url'))
@@ -136,6 +138,10 @@ class User(kale.Model, UserMixin):
 
     def get_session(self):
         return gh_oauth.get_session(token=self.access_token)
+
+    def generate_key(self):
+        raw = urandom(9)
+        self.key = urlsafe_b64encode(raw).decode()
 
 
 @login_manager.user_loader
@@ -181,9 +187,9 @@ def logout():
 @login_required
 def account():
     hide_message = True if 'dismissed_welcome' in current_user else False
-    current_user.key = 1234
     return render_template('account.html', page='account',
-                           hide_message=hide_message, processors=tuple(processors))
+                           hide_message=hide_message,
+                           processors=tuple(processors))
 
 
 @app.route('/dismiss-welcome')

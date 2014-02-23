@@ -1,3 +1,35 @@
+/* H5BP Stuff */
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+/* end H5BP */
+
 body {
   background: #38c3d2;
   color: white;
@@ -69,7 +101,10 @@ h2 em {
   font-style: normal;
 }
 
-
+button {
+  border: none;
+}
+button,
 .button {
   display: inline-block;
   line-height: 2.25em;
@@ -95,10 +130,12 @@ h2 em {
   /*line-height: 1em;*/
   height: 2.25em;
 }
+button:first-of-type,
 .button:first-of-type {
   border-top-left-radius: 0.3em;
   border-bottom-left-radius: 0.3em;
 }
+button:last-of-type,
 .button:last-of-type {
   border-top-right-radius: 0.3em;
   border-bottom-right-radius: 0.3em;
@@ -220,13 +257,22 @@ pre {
 }
 .message .dismiss {
   position: absolute;
-  padding: 0.5em;
-  line-height: 0.75em;
-  height: 0.75em;
   top: -0.3em;
   right: 0;
 }
+.small.button {
+  padding: 0.5em;
+  line-height: 0.75em;
+  height: 0.75em;
+}
 
+code {
+  font-family: FantasqueSansMono, monospace;
+}
+
+.i-want-to {
+  text-align: center;
+}
 
 select {
   color: #09a;

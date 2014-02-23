@@ -4,24 +4,32 @@
 
   {% if not hide_message %}
     <div class="message welcome">
-      <a class="dismiss button" href="{{ url_for('dismiss_welcome') }}" title="dismiss">&times;</a>
+      <a class="dismiss small button" href="{{ url_for('dismiss_welcome') }}" title="dismiss">&times;</a>
       <h2>Hello, {{ current_user.name or current_user.username }}</h2>
       <p>Welcome to Precomp! It would be really awesome if this message said something useful, but for some reason I'm the one writing it right now. And it's 4am. So instead, you get this useless copy. Hope you're happy.</p>
     </div>
   {% endif %}
 
-  <form>
-    <h3><label>Power</label></h3>
-    on/off...
+  <form class="power">
+    <h3><label for="newstate">Power</label></h3>
+    <input
+      class="visuallyhidden focusable"
+      type="checkbox"
+      id="newstate"
+      name="newstate"
+      {% if compiler_state == 'on' %}checked="checked"{% endif %} />
+    <button class="visuallyhidden focusable" type="submit">Set Power</button>
   </form>
 
-  <h3>Key</h3>
-  <span class="key">{{ current_user.key }}</span>
+  <div class="key">
+    <h3>Key</h3>
+    <code>{{ current_user.key }}</code>
+  </div>
 
 
   <h2>Quickstart</h2>
   <form>
-    <p>
+    <p class="i-want-to">
       I want to compile
       <select>
         {% for processor in processors %}
@@ -36,7 +44,7 @@
 curl whateever tar | http://<em class="processor">{{ processors[0] }}</em>.precomp.ca/?key=<em class="key">{{ current_user.key }}</em> | tar zx whatever
 </pre>
 
-  <h3>Autopilot with our autoclient</h3>
+  <h3>Autopilot with our autoclient <small><a class="small button" href="">+ more info</a></small></h3>
   <pre>
 config:
   in: yaml
