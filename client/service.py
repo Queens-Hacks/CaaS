@@ -1,7 +1,11 @@
 import queue
 import threading
+import requests
+from utils import untar_stream_to_path
 
 class Service(object):
+
+    URL = "http://localhost:5000/{0}"
 
     SERVICES = (
         "coffescript",
@@ -32,6 +36,14 @@ class Service(object):
     def join(self):
         self.worker.join()
 
+    def send(self, service, stream):
+        r = requests.post(self.URL.format(service), files={"data": stream})
+        if not r.ok:
+            return None
+        else:
+            return r.content
+
+
     def serve_forever(self):
         """Sends the data in the stream to the compilation service"""
         while True:
@@ -43,6 +55,10 @@ class Service(object):
 
             conf, stream, callback = temp
 
-            print (conf['output'])
-            print (stream)
-            callback()
+            try:
+                content = self.send(conf['type'], stream)
+                if content is not None:
+                    untar_stream_to_path(content, conf['output'])
+            finally:
+                # Make sure to always call the callback
+                callback()

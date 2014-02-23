@@ -1,5 +1,5 @@
 debug:
-  type: "less"
+  type: "sass"
   input: "client"
-  output: "."
+  output: "sample_compiled_output_dir"
   interval: 1

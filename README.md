@@ -10,7 +10,7 @@ Using the service
 
 CLI One-liner
 -------------
-    tar -cz folder | curl -sfF source=@- http://less.precomp.ca | tar zx
+    tar -cz folder | curl -sfF data=@- http://less.precomp.ca | tar zx
 
 This will take the contents of `folder`, compress them, send them to the
 LESS CaaS, then output the resulting compiled code.
@@ -62,7 +62,7 @@ Variable            | Description
 `GITHUB_CLIENT_SECRET` | Same deal
 `MONGO_URI`         | Whatever you got from MongoHQ or wherever.
 
-After these steps, you should be able to just 
+After these steps, you should be able to just
 
 ```bash
 (venv) $ python manage.py runserver

@@ -1,7 +1,7 @@
 import threading
 import time
 import os
-from utils import zip_paths
+from utils import tar_paths
 
 class Watcher(threading.Thread):
 
@@ -22,10 +22,16 @@ class Watcher(threading.Thread):
         if not os.path.exists(self.conf['input']):
             raise Exception("Folder '{0}' does not exist".format(self.conf['input']))
 
+        if not os.path.isdir(self.conf['output']):
+            try:
+                os.mkdir(self.conf['output'])
+            except:
+                raise Exception("Cannot create output folder '{0}'".format(self.conf['output']))
+
         for dirpath, dirname, filenames in os.walk(self.conf['input']):
             for f in filenames:
                 path = os.path.join(dirpath, f)
-            
+
                 # Only store time modified
                 self.curr.add(os.path.getmtime(path))
 
@@ -45,7 +51,7 @@ class Watcher(threading.Thread):
         """Watch the specified directory"""
         while not self.stop.is_set():
             if self.watch():
-                stream = zip_paths(self.conf['input'])
+                stream = tar_paths(self.conf['input'])
                 self.lock.acquire()
                 self.service.process(self.conf, stream, self.unlock)
 
