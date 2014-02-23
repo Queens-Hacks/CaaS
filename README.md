@@ -41,3 +41,31 @@ Inside the compressed file will be:
 The status code of the response is the same as usual, except for:
 - 400 - This usually means the complation failed, see the log for more details.
 - 200 - The compilation suceeded. The compiled files will be in the compressed file.
+
+
+Setting up the server
+=====================
+
+ 1. [Create an application on github](https://github.com/settings/applications/new)
+    * Pick anything for all the fields excep the last one
+    * set `Authorization callback URL` to `http://localhost:5000/authorized`/
+ 2. Create a database at [MongoHQ](https://www.mongohq.com/home) or any online mongo as a service or run mongo locally.
+ 3. Create and activate a Python 3.3+ virtualenv. See [virtualenv.org](http://www.virtualenv.org/en/latest/).
+ 4. Install requirements with `$ pip install -r requirements-server.txt`.
+ 5. Configure the app. You can either create a `config.py` file, or export the variables to the environment. You must set these variables:
+
+Variable            | Description
+---------------------------------
+`SECRET_KEY`        | Must be something, but for local development it can be anything
+`DEBUG`             | You'll probably want this to be `True` for local development
+`GITHUB_CLIENT_ID`  | GitHub gives you this after registering your application on GitHub
+`GITHUB_CLIENT_SECRET` | Same deal
+`MONGO_URI`         | Whatever you got from MongoHQ or wherever.
+
+After these steps, you should be able to just 
+
+```bash
+(venv) $ python manage.py runserver
+```
+
+and play around at [localhost:5000](http://localhost:5000)
