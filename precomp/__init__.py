@@ -2,7 +2,7 @@
 import tempfile
 from os import environ
 from shutil import rmtree
-from utils import zip_paths, unzip_to_path
+from utils import tar_paths, untar_to_path
 from werkzeug.exceptions import NotFound
 from flask import Flask, url_for, redirect, render_template, request, Response
 
@@ -43,7 +43,7 @@ def unpack_file(zfile):
 
     temp_dir = tempfile.mkdtemp()
 
-    unzip_to_path(zfile, temp_dir)
+    untar_to_path(zfile, temp_dir)
 
     return temp_dir
 
@@ -51,7 +51,7 @@ def unpack_file(zfile):
 def pack_and_clean(directory):
     """Compresses the files in the directory and then deletes the directory"""
 
-    stream = zip_paths(directory)
+    stream = tar_paths(directory)
 
     rmtree(directory)
 
@@ -96,4 +96,4 @@ def get_service(processor):
 
     data = pack_and_clean(temp_dir)
 
-    return Response(data, mimetype="application/zip")
+    return Response(data, mimetype="application/gzip")
