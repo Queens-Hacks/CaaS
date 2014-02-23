@@ -10,7 +10,7 @@ Using the service
 
 CLI One-liner
 -------------
-    zip -r - folder | curl -X POST --data-binary @- http://less.precomp.ca
+    zip -r - folder | curl -X POST --data-binary @- http://less.precomp.ca --fail
 
 This will take the contents of `folder`, compress them, and send them to the
 LESS CaaS.
