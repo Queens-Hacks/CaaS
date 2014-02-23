@@ -85,12 +85,12 @@ def get_service(processor):
         return Response ("no files recieved, should be 1", status=400)
 
     elif len(request.files) != 1:
-        return Response ("should one send 1 file, sent {}".format(len(request.files)), status=400)
+        return Response ("should send 1 file, sent {}".format(len(request.files)), status=400)
 
     elif request.files['data'] is None:
         return Response ("form key should be 'data'", status=400)
 
-    temp_dir = unpack_file(request.files['source'])
+    temp_dir = unpack_file(request.files['data'])
 
     output_dir = (processors[processor])(temp_dir)
 
