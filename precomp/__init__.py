@@ -24,7 +24,10 @@ try:
         GITHUB_CLIENT_SECRET=environ['GITHUB_CLIENT_SECRET'],
     )
 except KeyError as e:
-    from .config import CONFIG
+    try:
+        from .config import CONFIG
+    except ImportError:
+        raise e
     app.config.update(CONFIG)
 
 
