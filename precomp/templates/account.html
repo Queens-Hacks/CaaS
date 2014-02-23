@@ -6,7 +6,11 @@
     <div class="message welcome">
       <a class="dismiss small button" href="{{ url_for('dismiss_welcome') }}" title="dismiss">&times;</a>
       <h2>Hello, {{ current_user.name or current_user.username }}</h2>
-      <p>Welcome to Precomp! It would be really awesome if this message said something useful, but for some reason I'm the one writing it right now. And it's 4am. So instead, you get this useless copy. Hope you're happy.</p>
+      <p>Welcome to Precomp! We provide you with Compilation as a Service. Instead of having to suffer the clutter of
+      many libraries and dependencies, you can simply compile those files in the cloud with Precomp. Easy access is
+      available via the command line with curl, or for more automation, you can configure our client to watch your
+      source directories and it will automatically compile them when you make changes.
+      </p>
     </div>
   {% endif %}
 
@@ -53,22 +57,24 @@
   <div class="usecase">
     <div class="tabs">
       <a href="#curl" class="button selected">Compile with <code>curl</code></a>
-      <a href="#client" class="button">Autopilot with our autoclient</a>
+      <a href="#client" class="button">Autopilot with our Autoclient</a>
     </div>
 
     <div class="use selected curl">
       <pre>
-curl whateever tar | http://<em class="processor">{{ processors[0] }}</em>.precomp.ca/?key=<em class="key">{{ current_user.key }}</em> | tar zx whatever
+tar -cz folder | curl -sfF data=@- http://precomp.ca/<em class="processor">{{ processors[0] }}</em>/?key=<em class="key">{{ current_user.key }}</em>| tar zxf - -C output_folder/
 </pre>
     </div>
 
     <div class="use autopilot">
       <pre>
 config:
-  in: yaml
-  woo: awesome
   processor: <em class="processor">{{ processors[0] }}</em>
   key: <em class="key">{{ current_user.key }}</em>
+  input: input_folder
+  output: output_folder
+  extras:
+    logging: on
 </pre>
     </div>
   </div>

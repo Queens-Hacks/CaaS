@@ -10,7 +10,7 @@ Using the service
 
 CLI One-liner
 -------------
-    tar -cz folder | curl -sfF data=@- http://sass.precomp.ca | (mkdir -p output_folder & tar zxf - -C output_folder/)
+    tar -cz folder | curl -sfF data=@- http://precomp.ca/sass | tar zxf - -C output_folder/
 
 This will take the contents of `folder`, compress them, send them to the
 LESS CaaS, then output the resulting compiled code to `output_folder`.
