@@ -6,3 +6,4 @@ Flask-kale==0.1
 requests==2.2.1
 rauth==0.6.2
 requests==2.2.1
+pyyaml==3.10

@@ -1,0 +1,5 @@
+debug:
+  type: "less"
+  input: "client"
+  output: "."
+  interval: 1

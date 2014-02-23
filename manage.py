@@ -21,17 +21,16 @@ def hello():
     print('hello')
 
 @manager.command
-def runclient(service, directory="."):
+def runclient(config="client/config.yaml"):
     """Runs the client for a type of processor on a given directory"""
+
     from client.client import Client
-    print ("service arg: " + service)
-    if service is not None:
-        c = Client(service, directory)
-        c.start_watching()
+
+    c = Client(config)
+    c.start_watching()
 
     @atexit.register
     def on_exit():
-        print ("in after thing")
         if c:
             c.stop_watching()
 
