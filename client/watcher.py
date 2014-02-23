@@ -5,7 +5,8 @@ from utils import tar_paths
 
 class Watcher(threading.Thread):
 
-    def __init__(self, conf, service):
+    def __init__(self, name, conf, service):
+        self.name_ = name
         self.conf = conf
         self.service = service
 
@@ -20,7 +21,7 @@ class Watcher(threading.Thread):
 
         self.curr = set()
         if not os.path.exists(self.conf['input']):
-            raise Exception("File/folder '{0}' does not exist".format(self.conf['input']))
+            raise Exception("{0}: File/folder '{1}' does not exist".format(self.name_, self.conf['input']))
 
         if not os.path.isdir(self.conf['input']):
             # Only checking a single file
@@ -50,6 +51,7 @@ class Watcher(threading.Thread):
         """Watch the specified directory"""
         while not self.stop.is_set():
             if self.watch():
+                print ("{0}: Files changed, recompiling...".format(self.name_))
                 stream = tar_paths(self.conf['input'])
                 self.lock.acquire()
                 self.service.process(self.conf, stream, self.unlock)
@@ -57,6 +59,7 @@ class Watcher(threading.Thread):
                 # Wait until the job is processed before continuing
                 self.lock.acquire()
                 self.lock.release()
+                print ("{0}: Finished recompiling, new files in '{1}'".format(self.name_, self.conf['output']))
             time.sleep(self.conf['interval'])
 
     def unlock(self):

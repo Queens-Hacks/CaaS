@@ -14,7 +14,7 @@ class Manager(object):
 
         self.watchers = []
         for k, v in config.items():
-            self.watchers.append(Watcher(v, self.s))
+            self.watchers.append(Watcher(k, v, self.s))
 
     def start_watching(self):
         """Start the watchers"""
