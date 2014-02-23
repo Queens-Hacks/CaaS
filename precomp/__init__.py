@@ -65,7 +65,7 @@ def processor(lang):
 
 # we can import other stuff now that we have a reference to app and everything.
 from . import account
-from . import processors
+from . import processes
 
 
 @app.route("/<processor>", methods=['POST'])

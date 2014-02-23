@@ -17,12 +17,9 @@
     <p>
       I want to compile
       <select style="color:black;">
-        <option>sass</option>
-        <option>less</option>
-        <optgroup>
-          asdf
-          <option>C++</option>
-        </optgroup>
+        {% for processor in processors %}
+          <option>{{ processor }}</option>
+        {% endfor %}
       </select>
     </p>
   </form>
