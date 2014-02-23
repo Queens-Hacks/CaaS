@@ -199,3 +199,10 @@ def dismiss_welcome():
     current_user.save()
     return redirect(url_for('account'))
 
+
+@app.route('/toggle-compiler-state')
+@login_required
+def toggle_compiler_state():
+    current_user.compiler_state = 'off' if current_user.compiler_state == 'on' else 'on'
+    current_user.save()
+    return redirect(url_for('account'))

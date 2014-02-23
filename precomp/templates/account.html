@@ -17,40 +17,60 @@
       type="checkbox"
       id="newstate"
       name="newstate"
-      {% if compiler_state == 'on' %}checked="checked"{% endif %} />
+      {% if current_usercompiler_state == 'on' %}
+        checked="checked"
+      {% endif %} />
+    <a
+      href="{{ url_for('toggle_compiler_state') }}"
+      class="power-widget-container state-{{ current_user.compiler_state }}">
+      <div class="power-widget button">{{ current_user.compiler_state }}</div>
+    </a>
     <button class="visuallyhidden focusable" type="submit">Set Power</button>
   </form>
 
-  <div class="key">
+  <div class="key-blah">
     <h3>Key</h3>
-    <code>{{ current_user.key }}</code>
+    <div class="key-container">
+      <code>{{ current_user.key }}</code>
+    </div>
   </div>
 
 
-  <h2>Quickstart</h2>
-  <form>
-    <p class="i-want-to">
-      I want to compile
-      <select>
-        {% for processor in processors %}
-          <option>{{ processor }}</option>
-        {% endfor %}
-      </select>
-    </p>
-  </form>
+  <div class="quickstart">
+    <h2>Quickstart:</h2>
+    <form>
+      <p class="i-want-to">
+        I want to compile
+        <select class="button">
+          {% for processor in processors %}
+            <option value="{{ processor }}">{{ processor }}</option>
+          {% endfor %}
+        </select>
+      </p>
+    </form>
+  </div>
 
-  <h3>Compile with <code>curl</code></h3>
-  <pre>
+  <div class="usecase">
+    <div class="tabs">
+      <a href="#curl" class="button selected">Compile with <code>curl</code></a>
+      <a href="#client" class="button">Autopilot with our autoclient</a>
+    </div>
+
+    <div class="use selected curl">
+      <pre>
 curl whateever tar | http://<em class="processor">{{ processors[0] }}</em>.precomp.ca/?key=<em class="key">{{ current_user.key }}</em> | tar zx whatever
 </pre>
+    </div>
 
-  <h3>Autopilot with our autoclient <small><a class="small button" href="">+ more info</a></small></h3>
-  <pre>
+    <div class="use autopilot">
+      <pre>
 config:
   in: yaml
   woo: awesome
   processor: <em class="processor">{{ processors[0] }}</em>
   key: <em class="key">{{ current_user.key }}</em>
 </pre>
+    </div>
+  </div>
 
 {% endblock %}

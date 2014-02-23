@@ -266,8 +266,69 @@ pre {
   height: 0.75em;
 }
 
+.power,
+.key-blah {
+  display: inline-block;
+  width: 350px;
+  text-align: center;
+}
+.power h3,
+.key-blah h3 {
+  display: inline-block;
+  margin-right: 1em;
+}
+.power-widget-container,
+.key-container {
+  display: inline-block;
+  padding: 3px;
+  background: transparent;
+  border: 3px solid #09a;
+  border-radius: 8px;
+}
+.power-widget-container {
+  width: 130px;
+  text-align: left;
+  cursor: pointer;
+}
+.power-widget-container:hover {
+  background: #09a;
+}
+.power-widget {
+  text-align: center;
+  width: 32px;
+}
+.state-off .power-widget {
+  color: white;
+  background: #e37272;
+}
+.state-on {
+  text-align: right;
+}
+.state-on .power-widget {
+  color: white;
+  background: #81e647;
+}
+.key-container code {
+  display: inline-block;
+  padding: 0.5em 2em;
+}
+
+
 code {
   font-family: FantasqueSansMono, monospace;
+}
+
+
+.quickstart {
+  margin: 4em 0 1em;
+  /*text-align: center;*/
+}
+.quickstart h2 {
+  display: inline-block;
+  margin-right: 1em;
+}
+.quickstart form {
+  display: inline-block;
 }
 
 .i-want-to {
@@ -280,4 +341,42 @@ select {
 
 .usecase em {
   font-style: normal;
+  color: white;
+  /*background: rgba(255, 255, 255, 0.1);*/
 }
+
+.tabs .button {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  color: #09a;
+}
+.tabs .button:not(.selected) {
+  color: #bbc;
+}
+.tabs .button:not(.selected):hover {
+  color: #38c3d2;
+}
+
+.usecase .use:not(.selected) {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.usecase pre {
+  font-size: 0.8em;
+  padding: 0.5em;
+  background: rgba(0, 0, 0, 0.333);
+  border-radius: 4px;
+  border-top-left-radius: 0;
+}
+.usecase.curl pre:before {
+  content: "$ ";
+}
+
+
