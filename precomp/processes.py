@@ -61,8 +61,9 @@ def gccmake_proc(in_dir, out_dir):
     code, output = system_call(("make",))
     os.chdir(cwd)
 
+    output_logs(out_dir, code, output)
+
     if code != 0:
-        output_logs(out_dir, code, output)
         return False
 
     files = get_targets("targets")
